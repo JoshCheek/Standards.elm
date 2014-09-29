@@ -4,7 +4,7 @@ import Standards (Standard, State)
 import Window
 import Keyboard
 import Text
-import Char
+import Char (KeyCode)
 
 -- Named Values
 standardsBG    = rgb 60 100 60
@@ -31,11 +31,16 @@ display state =
   in  collage 500 500 [move (0, currentAtCenter) standardGroup]
 
 -- Run
+handleEvent keyCode state =
+  let upKey   = 38
+      downKey = 40
+  in if | keyCode == upKey   -> {state | currentIndex <- state.currentIndex + 1}
+        | keyCode == downKey -> {state | currentIndex <- state.currentIndex - 1}
+        | otherwise          -> state
+
 main =
-  let standard1             = Standard 1 "The first standard"  ["tag1", "tag2"]
-      standard2             = Standard 2 "The second standard" ["tag1", "tag3"]
-      standard3             = Standard 3 "The third standard"  ["tag2", "tag3"]
-      defaultStandards      = [standard1, standard2, standard3]
-      currentIndex          = 0
-      defaultStandardsState = lift (State defaultStandards currentIndex) Keyboard.lastPressed
-  in lift display defaultStandardsState
+  let standard1        = Standard 1 "The first standard"  ["tag1", "tag2"]
+      standard2        = Standard 2 "The second standard" ["tag1", "tag3"]
+      standard3        = Standard 3 "The third standard"  ["tag2", "tag3"]
+      defaultState     = State [standard1, standard2, standard3] 0
+  in lift display (foldp handleEvent defaultState Keyboard.lastPressed)

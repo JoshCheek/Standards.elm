@@ -7,5 +7,4 @@ type Standard = { id        : Int
 
 type State = { standards    : [Standard]
              , currentIndex : Int
-             , lastPressed  : Int
              }
