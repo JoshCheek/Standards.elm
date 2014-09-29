@@ -13,7 +13,7 @@ display standardsState =
       displayStandard message = group [ filled pongGreen (rect 200 50)
                                       , toForm message
                                       ]
-      positionFor n           = move (0, 60*n-60*3)
+      positionFor n           = move (0, 60*n-60*(.currentIndex standardsState))
       displayStandards ss n   = if | isEmpty ss -> []
                                    | otherwise  -> (positionFor n <| displayStandard <| head ss) :: (displayStandards (tail ss) (n+1))
       strings                 = map plainText (.standards standardsState)
