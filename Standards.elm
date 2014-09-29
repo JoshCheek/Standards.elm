@@ -14,19 +14,19 @@ display standardsState =
                                          ]
       displayStandards ss n      = if | isEmpty ss -> []
                                       | otherwise  -> (move (0, 60*n) (displayStandard <| head ss)) :: (displayStandards (tail ss) (n+1))
-      strings                    = [ plainText "omg1"
-                                   , plainText "omg2"
-                                   , plainText "omg3"
-                                   , plainText "omg4"
-                                   , asText (.lastPressed standardsState)
-                                   ]
+      strings                    = map plainText (.standards standardsState)
   in  collage 500 500 (displayStandards strings 0)
 
-type StandardsState   = { standards:String
+type StandardsState   = { standards:[String]
                         , lastPressed:Int
                         }
 
-defaultStandardsState = lift (StandardsState "a") Keyboard.lastPressed
+defaultStandardsState = let defaultStandards = [ "omg1"
+                                               , "omg2"
+                                               , "omg3"
+                                               , "omg4"
+                                               ]
+                        in lift (StandardsState defaultStandards) Keyboard.lastPressed
 main                  = lift display defaultStandardsState
 
 
