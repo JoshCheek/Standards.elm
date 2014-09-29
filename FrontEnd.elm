@@ -21,7 +21,7 @@ display : Standards.State -> Element
 display state =
   let positionFor n               = move (0, 60*n)
       positionStandards index svs = if | isEmpty svs -> []
-                                       | otherwise   -> (positionFor n (head svs)) :: (positionStandards (n+1) (tail svs))
+                                       | otherwise   -> (positionFor index (head svs)) :: (positionStandards (index+1) (tail svs))
       standardViews               = map standardView state.standards
   in  collage 500 500 <| [move (0, -60 * 3) (group <| positionStandards 0 standardViews)]
 
