@@ -25,12 +25,13 @@ display state =
       positionStandards index svs = if | isEmpty svs -> []
                                        | otherwise   -> (positionFor index (head svs)) :: (positionStandards (index+1) (tail svs))
       standardViews               = map standardView state.standards
+      standardGroup               = group <| positionStandards 0 standardViews
       currentAtCenter             = -totalStandardHeight * state.currentIndex
-  in  collage 500 500 <| [move (0, currentAtCenter) (group <| positionStandards 0 standardViews)]
+  in  collage 500 500 [move (0, currentAtCenter) standardGroup]
 
-defaultStandardsState =
-  let defaultStandards = ["omg1", "omg2", "omg3", "omg4"]
-      currentIndex     = 1
-  in  lift (Standards.State defaultStandards currentIndex) Keyboard.lastPressed
-
-main = lift display defaultStandardsState
+-- Run
+main =
+  let defaultStandards      = ["omg1", "omg2", "omg3", "omg4"]
+      currentIndex          = 0
+      defaultStandardsState = lift (Standards.State defaultStandards currentIndex) Keyboard.lastPressed
+  in  lift display defaultStandardsState
