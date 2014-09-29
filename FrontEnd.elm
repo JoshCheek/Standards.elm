@@ -1,6 +1,6 @@
 module FrontEnd where
 
-import Standards (Standard, State)
+import Standards (..)
 import Window
 import Keyboard
 import Text
@@ -40,8 +40,8 @@ handleEvent keyCode state =
         | otherwise          -> state
 
 main =
-  let standard1        = Standard 1 "The first standard"  ["tag1", "tag2"]
-      standard2        = Standard 2 "The second standard" ["tag1", "tag3"]
-      standard3        = Standard 3 "The third standard"  ["tag2", "tag3"]
-      defaultState     = State [standard1, standard2, standard3] 0
+  let standard1    = Standard 1 "The first standard"  ["tag1", "tag2"]
+      standard2    = Standard 2 "The second standard" ["tag1", "tag3"]
+      standard3    = Standard 3 "The third standard"  ["tag2", "tag3"]
+      defaultState = State 0 RootHierarchy [standard1, standard2, standard3]
   in lift display (foldp handleEvent defaultState Keyboard.lastPressed)

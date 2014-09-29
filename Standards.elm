@@ -5,6 +5,15 @@ type Standard = { id        : Int
                 , tags      : [String]
                 }
 
-type State = { standards    : [Standard]
-             , currentIndex : Int
+data Hierarchy = RootHierarchy
+               | HierarchyNode { id             : Int
+                               , parent_id      : Int
+                               , name           : String
+                               , tags           : [String]
+                               , subhierarchies : Hierarchy
+                               }
+
+type State = { currentIndex  : Int
+             , rootHierarchy : Hierarchy
+             , standards     : [Standard]
              }
