@@ -7,15 +7,17 @@ import Char
 
 -- collage gameWidth gameHeight
 -- toForm (if state == Play then spacer 1 1 else identity msg)
+display : StandardsState -> Element
 display standardsState =
   let pongGreen                  = rgb 60 100 60
       displayStandard message    = group [ filled pongGreen (rect 200 50)
                                          , toForm message
                                          ]
+      positionFor n              = move (0, 60*n)
       displayStandards ss n      = if | isEmpty ss -> []
-                                      | otherwise  -> (move (0, 60*n) (displayStandard <| head ss)) :: (displayStandards (tail ss) (n+1))
+                                      | otherwise  -> (positionFor n (displayStandard <| head ss)) :: (displayStandards (tail ss) (n+1))
       strings                    = map plainText (.standards standardsState)
-  in  collage 500 500 ((move (0, -60) (toForm <| asText (.currentIndex standardsState))) :: (displayStandards strings 0))
+  in  collage 500 500 (displayStandards strings 0)
 
 type StandardsState = { standards:[String]
                       , currentIndex:Int
