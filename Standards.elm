@@ -7,7 +7,7 @@ import Char
 
 -- collage gameWidth gameHeight
 -- toForm (if state == Play then spacer 1 1 else identity msg)
-display lastPressed =
+display standardsState =
   let pongGreen                  = rgb 60 100 60
       displayStandard message    = group [ filled pongGreen (rect 200 50)
                                          , toForm message
@@ -18,11 +18,13 @@ display lastPressed =
                                    , plainText "omg2"
                                    , plainText "omg3"
                                    , plainText "omg4"
-                                   , asText lastPressed
+                                   , asText (.lastPressed standardsState)
                                    ]
   in  collage 500 500 (displayStandards strings 0)
 
-main = lift display Keyboard.lastPressed
+type StandardsState   = {lastPressed:Int}
+defaultStandardsState = lift StandardsState Keyboard.lastPressed
+main = lift display defaultStandardsState
 
 
 -- -----  Part 1: Model the user input
