@@ -12,3 +12,8 @@ desc 'Build and open the app'
 task 'open' => 'build' do
   sh "open build/Frontend.html"
 end
+
+desc 'Remove files generated in the build'
+task 'clean' do
+  sh 'rm -r build cache'
+end
