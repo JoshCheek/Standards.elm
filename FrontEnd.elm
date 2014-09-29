@@ -19,11 +19,11 @@ standardView message =
 
 display : Standards.State -> Element
 display state =
-  let positionFor n           = move (0, 60*n)
-      displayStandards svs n  = if | isEmpty svs -> []
-                                   | otherwise   -> (positionFor n <| head svs) :: (displayStandards (tail svs) (n+1))
-      standardViews           = map standardView state.standards
-  in  collage 500 500 <| [move (0, -60 * 3) (group <| displayStandards standardViews 0)]
+  let positionFor n               = move (0, 60*n)
+      positionStandards index svs = if | isEmpty svs -> []
+                                       | otherwise   -> (positionFor n (head svs)) :: (positionStandards (n+1) (tail svs))
+      standardViews               = map standardView state.standards
+  in  collage 500 500 <| [move (0, -60 * 3) (group <| positionStandards 0 standardViews)]
 
 defaultStandardsState =
   let defaultStandards = ["omg1", "omg2", "omg3", "omg4"]
