@@ -1,4 +1,4 @@
-module GameSkeleton where
+module Standards where
 
 import Window
 import Keyboard
@@ -13,11 +13,11 @@ display standardsState =
       displayStandard message = group [ filled pongGreen (rect 200 50)
                                       , toForm message
                                       ]
-      positionFor n           = move (0, 60*n-60*(.currentIndex standardsState))
+      positionFor n           = move (0, 60*n)
       displayStandards ss n   = if | isEmpty ss -> []
                                    | otherwise  -> (positionFor n <| displayStandard <| head ss) :: (displayStandards (tail ss) (n+1))
       strings                 = map plainText (.standards standardsState)
-  in  collage 500 500 (displayStandards strings 0)
+  in  collage 500 500 <| map (move (0, -60 * 3)) (displayStandards strings 0)
 
 type StandardsState = { standards    : [String]
                       , currentIndex : Int
