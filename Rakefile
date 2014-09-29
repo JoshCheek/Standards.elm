@@ -1,9 +1,9 @@
 task default: 'build'
 
 desc 'Build the app the app'
-task 'build' => 'Frontend.elm'
+task 'build' => 'build/Frontend.html'
 
-file 'Frontend.elm' => 'build/Frontend.html'
+file 'build/Frontend.html' => 'Frontend.elm'
 file 'build/Frontend.html' do
   sh "elm --make Frontend.elm"
 end
