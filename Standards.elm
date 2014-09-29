@@ -22,9 +22,12 @@ display standardsState =
                                    ]
   in  collage 500 500 (displayStandards strings 0)
 
-type StandardsState   = {lastPressed:Int}
-defaultStandardsState = lift StandardsState Keyboard.lastPressed
-main = lift display defaultStandardsState
+type StandardsState   = { standards:String
+                        , lastPressed:Int
+                        }
+
+defaultStandardsState = lift (StandardsState "a") Keyboard.lastPressed
+main                  = lift display defaultStandardsState
 
 
 -- -----  Part 1: Model the user input
