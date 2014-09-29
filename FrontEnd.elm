@@ -32,7 +32,7 @@ display state =
   in  collage 500 500 [move (0, (toFloat currentAtCenter)) standardGroup]
 
 -- Run
-handleEvent keyCode state =
+applyKey keyCode state =
   let upKey   = 38
       downKey = 40
   in if | keyCode == upKey   -> {state | currentIndex <- state.currentIndex + 1}
@@ -40,5 +40,5 @@ handleEvent keyCode state =
         | otherwise          -> state
 
 main =
-  let updatedState = foldp handleEvent defaultStandardsState Keyboard.lastPressed
+  let updatedState = foldp applyKey defaultStandardsState Keyboard.lastPressed
   in lift display updatedState
