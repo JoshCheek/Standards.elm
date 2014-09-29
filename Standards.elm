@@ -15,19 +15,21 @@ display standardsState =
       displayStandards ss n      = if | isEmpty ss -> []
                                       | otherwise  -> (move (0, 60*n) (displayStandard <| head ss)) :: (displayStandards (tail ss) (n+1))
       strings                    = map plainText (.standards standardsState)
-  in  collage 500 500 (displayStandards strings 0)
+  in  collage 500 500 ((move (0, -60) (toForm <| asText (.currentIndex standardsState))) :: (displayStandards strings 0))
 
-type StandardsState   = { standards:[String]
-                        , lastPressed:Int
-                        }
+type StandardsState = { standards:[String]
+                      , currentIndex:Int
+                      , lastPressed:Int
+                      }
 
 defaultStandardsState = let defaultStandards = [ "omg1"
                                                , "omg2"
                                                , "omg3"
                                                , "omg4"
                                                ]
-                        in lift (StandardsState defaultStandards) Keyboard.lastPressed
-main                  = lift display defaultStandardsState
+                        in lift (StandardsState defaultStandards 0) Keyboard.lastPressed
+
+main = lift display defaultStandardsState
 
 
 -- -----  Part 1: Model the user input
