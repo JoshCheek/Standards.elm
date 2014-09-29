@@ -6,11 +6,13 @@ import Keyboard
 import Text
 import Char
 
-display : Standards.StandardsState -> Element
+-- colours
+standardsBG = rgb 60 100 60
 
+-- views
+display : Standards.State -> Element
 display standardsState =
-  let pongGreen               = rgb 60 100 60
-      displayStandard message = group [ filled pongGreen (rect 200 50)
+  let displayStandard message = group [ filled standardsBG (rect 200 50)
                                       , toForm message
                                       ]
       positionFor n           = move (0, 60*n)
@@ -21,6 +23,6 @@ display standardsState =
 
 defaultStandardsState =
   let defaultStandards = ["omg1", "omg2", "omg3", "omg4"]
-  in  lift (Standards.StandardsState defaultStandards 0) Keyboard.lastPressed
+  in  lift (Standards.State defaultStandards 0) Keyboard.lastPressed
 
 main = lift display defaultStandardsState

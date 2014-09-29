@@ -1,9 +1,9 @@
 module Standards where
 
-type StandardsState = { standards    : [String]
-                      , currentIndex : Int
-                      , lastPressed  : Int
-                      }
+type State = { standards    : [String]
+             , currentIndex : Int
+             , lastPressed  : Int
+             }
 
 
 -- -----  Part 1: Model the user input
