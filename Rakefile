@@ -1,5 +1,7 @@
-task 'Pong.elm' do
-  sh 'elm --make Pong.elm'
+file 'build/Standards.html' do
+  sh "elm --make Standards.elm"
+  sh "open build/Standards.html"
 end
 
-task default: 'Pong.elm'
+file 'Standards.elm' => 'build/Standards.html'
+task default: 'Standards.elm'
