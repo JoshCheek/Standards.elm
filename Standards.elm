@@ -1,6 +1,11 @@
 module Standards where
 
-type State = { standards    : [String]
+type Standard = { id        : Int
+                , standard  : String
+                , tags      : [String]
+                }
+
+type State = { standards    : [Standard]
              , currentIndex : Int
              , lastPressed  : Int
              }
