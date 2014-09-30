@@ -14,8 +14,12 @@ data Hierarchy = Hierarchy Int Int      String [String] [Hierarchy]
 data Path     = Top | Node [Hierarchy] Path [Hierarchy]
 data Location = Location Hierarchy Path
 
-traverser : Hierarchy -> Location
-traverser root = case root of Hierarchy i p n t s -> Location root (Node s Top [])
+zipper : Hierarchy -> Location
+zipper root = case root of Hierarchy i p n t s -> Location root (Node s Top [])
+
+unzip : Location -> Hierarchy
+unzip zipper = case zipper of Location hierarchy path -> hierarchy
+
 
 
 
@@ -31,7 +35,6 @@ type State = { currentIndex  : Int
 --              |
 --              a-b-c
 
--- add some hierarchies in here
 defaultStandardsState =
   let standard1     = Standard 1 "The first standard"  ["tag1", "tag2"]
       standard2     = Standard 2 "The second standard" ["tag1", "tag3"]
@@ -54,3 +57,5 @@ defaultStandardsState =
       hc            = Hierarchy 12 9 "hc"   [] []
 
   in State 0 root [standard1, standard2, standard3]
+
+main = asText ((zipper defaultStandardsState.rootHierarchy) |> unzip)
