@@ -8,43 +8,42 @@ type Standard = { id        : Int
                 }
 
 
--- Hierarchy               id  parentId name   tags     subhierarchies
+--   Hierarchy             id  parentId name   tags     subhierarchies
 data Hierarchy = Hierarchy Int Int      String [String] [Hierarchy]
-data Path      = Top | Node [Hierarchy] Path [Hierarchy]
-data Location  = Location Hierarchy Path
 
-zipper : Hierarchy -> Location
-zipper root = case root of Hierarchy i p n t s -> Location root (Node s Top [])
+--   Path                   left        up   right       current
+data Path      = Top | Node [Hierarchy] Path [Hierarchy] Hierarchy
 
-unzip : Location -> Hierarchy
-unzip zipper = case zipper of Location hierarchy path -> hierarchy
+zipper : Hierarchy -> Path
+zipper root = case root of Hierarchy i p n t s -> Node s Top [] root
 
-zipDown : Location -> Location
+unzip : Path -> Hierarchy
+unzip zipper = case zipper of Node l u r hierarchy -> hierarchy
+
+zipDown : Path -> Path
 zipDown zipper =
   case zipper of
-  Location (Hierarchy i p n t (s::ss)) path ->
-  Location s (Node [] path ss)
+  Node l u r (Hierarchy i p n t (nxt::children)) ->
+  Node [] zipper children nxt
 
-zipRight : Location -> Location
+zipRight : Path -> Path
 zipRight zipper =
   case zipper of
-  Location prev (Node left       up (nxt::right)) ->
-  Location nxt  (Node (prev::[]) up       right)
+  Top -> zipper
+  Node left       up (nxt::right) crnt ->
+  Node (crnt::[]) up right        nxt
 
-zipLeft : Location -> Location
+zipLeft : Path -> Path
 zipLeft zipper =
   case zipper of
-  Location prev (Node (nxt::left) up right) ->
-  Location nxt  (Node left        up (prev::right))
+  Node (nxt::left) up right         crnt ->
+  Node left        up (crnt::right) nxt
 
--- zipUp : Location -> Location
--- zipUp zipper =
---   case zipper of
---   Location h Top -> zipper
---   Location h (Node oldLeft oldUp oldRight) ->
---     case oldUp of
---     Location (Hierarchy i p n t (s::ss)) newUp
---     Location s (Node [] newUp ss)
+zipUp : Path -> Path
+zipUp zipper =
+  case zipper of
+  Top -> zipper
+  Node left up right crnt -> up
 
 -- State
 type State = { currentIndex  : Int
@@ -87,6 +86,6 @@ main =
                 |> zipDown
                 |> zipRight
                 |> zipLeft
-                -- |> zipUp
+                |> zipUp
                 |> unzip
   in asText goZipping
