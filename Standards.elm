@@ -10,15 +10,19 @@ type Standard = { id        : Int
 
 -- Hierarchy               id  parentId name   tags     subhierarchies
 data Hierarchy = Hierarchy Int Int      String [String] [Hierarchy]
-
-data Path     = Top | Node [Hierarchy] Path [Hierarchy]
-data Location = Location Hierarchy Path
+data Path      = Top | Node [Hierarchy] Path [Hierarchy]
+data Location  = Location Hierarchy Path
 
 zipper : Hierarchy -> Location
 zipper root = case root of Hierarchy i p n t s -> Location root (Node s Top [])
 
 unzip : Location -> Hierarchy
 unzip zipper = case zipper of Location hierarchy path -> hierarchy
+
+zipDown : Location -> Location
+zipDown zipper =
+  case zipper of
+  Location (Hierarchy i p n t (s::ss)) path -> Location s (Node [] path ss)
 
 
 
@@ -58,4 +62,8 @@ defaultStandardsState =
 
   in State 0 root [standard1, standard2, standard3]
 
-main = asText ((zipper defaultStandardsState.rootHierarchy) |> unzip)
+main =
+  let goZipping = (zipper defaultStandardsState.rootHierarchy)
+                |> zipDown
+                |> unzip
+  in asText goZipping
