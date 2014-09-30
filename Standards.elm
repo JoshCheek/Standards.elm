@@ -20,10 +20,13 @@ unzip : Location -> Hierarchy
 unzip zipper = case zipper of Location hierarchy path -> hierarchy
 
 zipDown : Location -> Location
-zipDown zipper =
-  case zipper of
-  Location (Hierarchy i p n t (s::ss)) path -> Location s (Node [] path ss)
+zipDown zipper = case zipper of Location (Hierarchy i p n t (s::ss)) path -> Location s (Node [] path ss)
 
+zipRight : Location -> Location
+zipRight zipper =
+  case zipper of
+  Location prev (Node left       up (nxt::right)) ->
+  Location nxt  (Node (prev::[]) up       right)
 
 
 
@@ -65,5 +68,7 @@ defaultStandardsState =
 main =
   let goZipping = (zipper defaultStandardsState.rootHierarchy)
                 |> zipDown
+                |> zipDown
+                |> zipRight
                 |> unzip
   in asText goZipping
