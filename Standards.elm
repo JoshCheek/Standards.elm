@@ -6,13 +6,16 @@ type Standard = { id        : Int
                 , tags      : [String]
                 }
 
--- Hierarchy
-data Hierarchy = Hierarchy { id             : Int
-                           , parentId       : Int
-                           , name           : String
-                           , tags           : [String]
-                           , subhierarchies : [Hierarchy]
-                           }
+-- Hierarchy               id  parentId name   tags     subhierarchies
+data Hierarchy = Hierarchy Int Int      String [String] [Hierarchy]
+
+data Path     = Top | Node [Hierarchy] Path [Hierarchy]
+data Location = Location Hierarchy Path
+
+traverser : Hierarchy -> Location
+traverser root = case root of Hierarchy i p n t s -> Location root (Node s Top [])
+
+
 
 -- State
 type State = { currentIndex  : Int
@@ -25,5 +28,5 @@ defaultStandardsState =
   let standard1     = Standard 1 "The first standard"  ["tag1", "tag2"]
       standard2     = Standard 2 "The second standard" ["tag1", "tag3"]
       standard3     = Standard 3 "The third standard"  ["tag2", "tag3"]
-      root          = Hierarchy {id = -1, parentId = -1, name = "root", tags = [], subhierarchies = []}
+      root          = Hierarchy -1 -1 "root" [] []
   in State 0 root [standard1, standard2, standard3]
