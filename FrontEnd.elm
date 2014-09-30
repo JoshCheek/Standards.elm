@@ -33,7 +33,7 @@ display state =
 
 -- Run
 applyKey keyCode state =
-  let upKey   = 38
+  let upKey   = 38 -- if these move onto the state itself, then user can choose their own keymap!
       downKey = 40
   in if | keyCode == upKey   -> {state | currentIndex <- state.currentIndex + 1}
         | keyCode == downKey -> {state | currentIndex <- state.currentIndex - 1}
