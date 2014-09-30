@@ -37,6 +37,15 @@ zipLeft zipper =
   Location prev (Node (nxt::left) up right) ->
   Location nxt  (Node left        up (prev::right))
 
+-- zipUp : Location -> Location
+-- zipUp zipper =
+--   case zipper of
+--   Location h Top -> zipper
+--   Location h (Node oldLeft oldUp oldRight) ->
+--     case oldUp of
+--     Location (Hierarchy i p n t (s::ss)) newUp
+--     Location s (Node [] newUp ss)
+
 -- State
 type State = { currentIndex  : Int
              , rootHierarchy : Hierarchy
@@ -78,5 +87,6 @@ main =
                 |> zipDown
                 |> zipRight
                 |> zipLeft
+                -- |> zipUp
                 |> unzip
   in asText goZipping
